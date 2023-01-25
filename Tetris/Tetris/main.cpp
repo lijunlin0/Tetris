@@ -2,27 +2,49 @@
 #include <graphics.h>
 #include <conio.h>
 #include <thread>
-#include"map.h"
+#include"game_map.h"
+#include"time.h"
 
 using namespace std;
 
-int main()
+long long time::update_ms = 0;
+
+void init_ui()
 {
-	int screen_width = 21 * game_map::BLOCK_SIZE;
-	int screen_height = 24 * game_map::BLOCK_SIZE;
-	initgraph(756, 864);
+	int size = game_map::BLOCK_SIZE;
+	//地图外框
 	COLORREF color = RGB(105, 105, 105);
 	setfillcolor(color);
-	solidrectangle(36, 36, 468, 828);
-	setfillcolor(BLACK);
-	solidrectangle(72, 72, 436, 796);
-	setfillcolor(color);
-	solidrectangle(504, 108, 720, 324);
-	setfillcolor(BLACK);
-	solidrectangle(540, 144, 684, 288);
+	solidrectangle(size, size, 13 * size, 23 * size);
 
+	//地图内框
+	setfillcolor(BLACK);
+	solidrectangle(2 * size, 2 * size, 12 * size, 22 * size);
+
+	//next外框
+	setfillcolor(color);
+	solidrectangle(14 * size, 3 * size, 20 * size, 9 * size);
+
+	setfillcolor(BLACK);
+	solidrectangle(15 * size, 4 * size, 19 * size, 8 * size);
+}
+
+int main()
+{
+	int size = game_map::BLOCK_SIZE;
+	int screen_width = 21 * size;
+	int screen_height = 24 * size;
+	
+	initgraph(756, 864);
+	init_ui();
+	game_map m;
 	while (true)
 	{
-
+		long long current = time::current_time();
+		if (current - time::update_ms < time::frame_ms)
+		{
+			continue;
+		}
+		m.update();
 	}
 }

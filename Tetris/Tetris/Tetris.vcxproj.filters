@@ -21,9 +21,15 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="game_map.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="map.h">
+    <ClInclude Include="game_map.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>
