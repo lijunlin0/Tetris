@@ -133,8 +133,10 @@
   <ItemGroup>
     <ClCompile Include="game_map.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="block.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="block.h" />
     <ClInclude Include="game_map.h" />
     <ClInclude Include="time.h" />
   </ItemGroup>
