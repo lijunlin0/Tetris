@@ -1,7 +1,6 @@
 #pragma once
 #include<windows.h>
-#include"block.h"
-
+class block;
 class game_map
 {
 public:
@@ -13,25 +12,26 @@ public:
 	static const int BLOCK_SIZE = 36;
 	static const int WIDTH = 10;
 	static const int HEIGHT = 20;
-	static const int COLOR_RED = 1;
-	static const int COLOR_GREEN = 2;
 	//空白
 	static const int BLANK = 0;
 	//砖块身体
 	static const int BODY = 1;
 	//砖块障碍物
 	static const int BLOCK = 2;
-	
-public:
+	static const int COLOR_COUNT=7;
+	const int offset_x = 2;
+	const int offset_y = 2;
+
+	int data[WIDTH][HEIGHT];
 	block* m_block;
-	static int data[WIDTH][HEIGHT];
+
+public:
 	game_map();
 	//更新
 	void update();
 	//方块值抹除
 	void reset();
 	bool isvalid(int x,int y);
-	COLORREF color = RGB(255, 105, 180);
 	COLORREF value_to_color(int value);
 	//生成方块
 	void create_block();
@@ -42,4 +42,7 @@ public:
 
 	int get_value(int x, int y);
 	void set_value(int x, int y,int value);
+	//画小方块
+	void draw_cell(int x,int y,int value);
+	void draw();
 };

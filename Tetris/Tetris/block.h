@@ -11,7 +11,7 @@ public:
 	int m_value;
 	int block_x = 3;
 	int block_y = 0;
-	game_map* m;
+	game_map*m;
 	block(int value,game_map*map);
 	//能否左移
 	bool can_move_left();
@@ -35,4 +35,7 @@ public:
 	std::pair<int,int> get_rotate_position(int x,int y);
 	//获取旋转障碍位置
 	std::pair<int, int> get_obstacle_position(int x, int y);
+	void draw();
+	//根据数字设置data
+	void set_data();
 };

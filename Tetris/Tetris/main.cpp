@@ -48,7 +48,7 @@ int main()
 		{
 			continue;
 		}
-		m.reset();
+		//m.reset();
 		bool b = peekmessage(&msg, EX_KEY);
 		if (b && msg.message == WM_KEYDOWN)
 		{

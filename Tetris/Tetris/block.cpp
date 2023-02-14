@@ -5,7 +5,22 @@ block::block(int value,game_map*map)
 {
 	m_value = value;
 	m=map;
+	set_data();
 }
+
+//根据数字设置data
+void block::set_data()
+{
+	if (m_value == 1)
+	{
+		data[0][1] == 1; data[1][1] == 1; data[2][1] == 1; data[3][1] == 1;
+	}
+	if (m_value == 2)
+	{
+		data[1][0] = m_value; data[2][0] = m_value; data[1][1] = m_value; data[1][2] = m_value;
+	}
+}
+
 //能否左移
 bool block::can_move_left()
 {
@@ -114,17 +129,26 @@ bool block::can_rotate()
 	{
 		for (int j = 0; j < height; j++)
 		{
-			x = get_rotate_position(i, j).first;
-			y = get_rotate_position(i, j).second;
+			if (data[i][j] == m_value)
+			{
+				continue;
+			}
 			if (i == 1 && j == 1)
 			{
 				continue;
 			}
-			if (data[x][y] == m_value)
+			std::pair<int, int> position = get_rotate_position(i, j);
+			x = position.first+block_x;
+			y = position.second+block_y;
+			
+			if (m->get_value(x,y)>0)
 			{
 				return false;
 			}
-			else if (data[get_obstacle_position(i, j).first][get_obstacle_position(i, j).second] == m_value)
+			position = get_obstacle_position(i, j);
+			x = position.first + block_x;
+			y = position.second + block_y;
+			if (m->get_value(x,y)>0)
 			{
 				return false;
 			}
@@ -164,7 +188,10 @@ void block::rotate()
 	{
 		for (int j = 0; j < height; j++)
 		{
-			data[get_rotate_position(i, j).first][get_rotate_position(i, j).second] = temp[i][j];
+			std::pair<int, int> position = get_rotate_position(i, j);
+			int x = position.first;
+			int y = position.second;
+			data[x][y] = temp[i][j];
 		}
 	}
 }
@@ -177,6 +204,20 @@ void block::reset()
 			if (data[i][j] == m_value)
 			{
 				m->set_value(i + block_x, j + block_y, 0);
+			}
+		}
+	}
+}
+
+void block::draw()
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (data[i][j] == m_value)
+			{
+				m->draw_cell(i + block_x, j + block_y, m_value);
 			}
 		}
 	}

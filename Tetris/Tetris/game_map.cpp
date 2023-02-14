@@ -3,23 +3,28 @@
 #include <graphics.h>
 #include <time.h>
 #include <conio.h>
+#include<cmath>
+#include"block.h"
+#include<iostream>
 
 game_map::game_map()
 {
 	for (int i = 0; i < WIDTH; i++)
 	{
-		for (int j = 0; j < HEIGHT; i++)
+		for (int j = 0; j < HEIGHT; j++)
 		{
 			data[i][j] = 0;
 		}
 	 }
+	create_block();
 }
 
 //生成方块
 void game_map::create_block()
 {
-	
-	
+	int num = rand() % COLOR_COUNT+1;
+	num = 2;
+	m_block = new block(num,this);
 }
 
 //更新
@@ -28,7 +33,7 @@ void game_map::update()
 	//1.更新掉落中的方块
 	//2.清空地图
 	//3.根据数据绘制格子
-
+	draw();
 }
 
 //位置是否合法
@@ -38,12 +43,10 @@ bool game_map::isvalid(int x,int y)
 }
 
 
-COLORREF value_to_color(int value)
+COLORREF game_map::value_to_color(int value)
 {
-	COLORREF color = RGB(255, 105, 180);
 	switch (value)
 	{
-	case 0:return BLACK;
 	case 1:return BLUE;
 	case 2:return GREEN;
 	case 3:return RED;
@@ -97,4 +100,32 @@ void game_map::set_value(int x, int y, int value)
 void game_map::reset()
 {
 	m_block->reset();
+}
+
+//画小方块
+void game_map::draw_cell(int x, int y, int value)
+{
+	COLORREF color = value_to_color(value);
+	setfillcolor(value_to_color(color));
+	int left_x = (x + offset_x) * BLOCK_SIZE;
+	int up_y = (y + offset_y) * BLOCK_SIZE;
+	int right_x = (x + 1 + offset_x) * BLOCK_SIZE;
+	int down_y = (y + 1 + offset_y) * BLOCK_SIZE;
+	solidrectangle(left_x, up_y, right_x, down_y);
+	std::cout << x << " " << y << std::endl;
+}
+
+void game_map::draw()
+{
+	for (int i = 0; i < WIDTH; i++)
+	{
+		for (int j = 0; j < HEIGHT; j++)
+		{
+			if (data[i][j] > 0)
+			{
+				draw_cell(i, j, data[i][j]);
+			}
+		}
+	}
+	m_block->draw();
 }
