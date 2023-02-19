@@ -5,10 +5,11 @@
 #include <conio.h>
 #include<cmath>
 #include"block.h"
-#include<iostream>
+#include"time.h"
 
 game_map::game_map()
 {
+	gap = BLOCK_MOVE_GAP;
 	for (int i = 0; i < WIDTH; i++)
 	{
 		for (int j = 0; j < HEIGHT; j++)
@@ -17,6 +18,38 @@ game_map::game_map()
 		}
 	 }
 	create_block();
+}
+
+//消除
+void game_map::eliminate()
+{
+	int y = 0;
+	if (m_block->is_move == false)
+	{
+		for (int i = 0; i < WIDTH; i++)
+		{
+			int is_eli = true;
+			for (int j = 0; j < HEIGHT; j++)
+			{
+				if (data[i][j] < 0)
+				{
+					is_eli = false;
+					break;
+				}
+			}
+			//如果能消除
+			if (is_eli)
+			{
+				//消除
+				for (int x = 0; x < WIDTH; x++)
+				{
+					y = i - 1;
+					data[x][y] == 0;
+				}
+			}
+
+		}
+	}
 }
 
 //生成方块
@@ -34,6 +67,12 @@ void game_map::update()
 	//2.清空地图
 	//3.根据数据绘制格子
 	draw();
+	if (time::update_ms - move_ms < gap)
+	{
+		return;
+	}
+	move_ms = time::update_ms;
+	m_block->move_down();
 }
 
 //位置是否合法
@@ -99,7 +138,12 @@ void game_map::set_value(int x, int y, int value)
 //方块值抹除
 void game_map::reset()
 {
-	m_block->reset();
+	setfillcolor(BLACK);
+	int left_x = (0 + offset_x) * BLOCK_SIZE;
+	int up_y = (0 + offset_y) * BLOCK_SIZE;
+	int right_x = (WIDTH + offset_x) * BLOCK_SIZE;
+	int down_y = (HEIGHT + offset_y) * BLOCK_SIZE;
+	solidrectangle(left_x, up_y, right_x, down_y);
 }
 
 //画小方块
@@ -112,7 +156,6 @@ void game_map::draw_cell(int x, int y, int value)
 	int right_x = (x + 1 + offset_x) * BLOCK_SIZE;
 	int down_y = (y + 1 + offset_y) * BLOCK_SIZE;
 	solidrectangle(left_x, up_y, right_x, down_y);
-	std::cout << x << " " << y << std::endl;
 }
 
 void game_map::draw()

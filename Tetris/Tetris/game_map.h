@@ -21,7 +21,10 @@ public:
 	static const int COLOR_COUNT=7;
 	const int offset_x = 2;
 	const int offset_y = 2;
+	const int BLOCK_MOVE_GAP = 500;
 
+	long long move_ms;
+	int gap;
 	int data[WIDTH][HEIGHT];
 	block* m_block;
 
@@ -45,4 +48,7 @@ public:
 	//»­Ð¡·½¿é
 	void draw_cell(int x,int y,int value);
 	void draw();
+
+	//Ïû³ý
+	void eliminate();
 };

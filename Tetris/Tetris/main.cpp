@@ -48,7 +48,8 @@ int main()
 		{
 			continue;
 		}
-		//m.reset();
+		time::update_ms = current;
+		m.reset();
 		bool b = peekmessage(&msg, EX_KEY);
 		if (b && msg.message == WM_KEYDOWN)
 		{

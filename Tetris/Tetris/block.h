@@ -11,6 +11,7 @@ public:
 	int m_value;
 	int block_x = 3;
 	int block_y = 0;
+	bool is_move;
 	game_map*m;
 	block(int value,game_map*map);
 	//能否左移
@@ -29,8 +30,6 @@ public:
 	void move_down();
 	//旋转
 	void rotate();
-	//方块值抹除
-	void reset();
 	//获取旋转后的位置
 	std::pair<int,int> get_rotate_position(int x,int y);
 	//获取旋转障碍位置
