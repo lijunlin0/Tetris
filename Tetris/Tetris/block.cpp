@@ -12,14 +12,37 @@ block::block(int value,game_map*map)
 //根据数字设置data
 void block::set_data()
 {
+	//一字形
 	if (m_value == 1)
 	{
 		data[0][1] = 1; data[1][1] = 1; data[2][1] = 1; data[3][1] = 1;
 	}
+	//反7
 	if (m_value == 2)
 	{
 		data[1][0] = m_value; data[1][1] = m_value; data[1][2] = m_value; data[2][2] = m_value;
 	}
+	//7
+	if (m_value == 3)
+	{
+		data[0][0] = m_value; data[1][0] = m_value; data[1][1] = m_value; data[1][2] = m_value;
+	}
+	//z
+	if (m_value == 4)
+	{
+		data[0][0] = m_value; data[1][0] = m_value; data[1][1] = m_value; data[2][1] = m_value;
+	}
+	//反z
+	if (m_value == 5)
+	{
+		data[1][0] = m_value; data[2][0] = m_value; data[0][1] = m_value; data[1][1] = m_value;
+	}
+	//土
+	if (m_value == 6)
+	{
+		data[1][0] = m_value; data[0][1] = m_value; data[1][1] = m_value; data[2][1] = m_value;
+	}
+
 }
 
 //能否左移
@@ -128,6 +151,18 @@ bool block::can_rotate()
 {
 	int x = 0;
 	int y = 0;
+	//如果是一字形方块
+	if (m_value == 1)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				
+			}
+		}
+	}
+	//其他方块
 	for (int i = 0; i < width-1; i++)
 	{
 		for (int j = 0; j < height-1; j++)
@@ -144,6 +179,11 @@ bool block::can_rotate()
 			x = position.first+block_x;
 			y = position.second+block_y;
 			
+			if (x < 0 || x >= m->WIDTH || y < 0 || y >= m->HEIGHT)
+			{
+				return false;
+			}
+
 			if (m->get_value(x,y)>0)
 			{
 				return false;
@@ -187,9 +227,9 @@ void block::rotate()
 			temp[i][j] = data[i][j];
 		}
 	}
-	for (int i = 0; i < width; i++)
+	for (int i = 0; i < width-1; i++)
 	{
-		for (int j = 0; j < height; j++)
+		for (int j = 0; j < height-1; j++)
 		{
 			std::pair<int, int> position = get_rotate_position(i, j);
 			int x = position.first;
@@ -208,6 +248,20 @@ void block::draw()
 			if (data[i][j] == m_value)
 			{
 				m->draw_cell(i + block_x, j + block_y, m_value);
+			}
+		}
+	}
+}
+//将方块放在地图中
+void block::put_to_map()
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (data[i][j] == m_value)
+			{
+				m->data[i + block_x][j + block_y] = m_value;
 			}
 		}
 	}

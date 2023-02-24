@@ -1,5 +1,6 @@
 #pragma once
 #include<windows.h>
+#include<vector>
 class block;
 class game_map
 {
@@ -18,7 +19,7 @@ public:
 	static const int BODY = 1;
 	//砖块障碍物
 	static const int BLOCK = 2;
-	static const int COLOR_COUNT=7;
+	static const int COLOR_COUNT=6;
 	const int offset_x = 2;
 	const int offset_y = 2;
 	const int BLOCK_MOVE_GAP = 500;
@@ -51,4 +52,6 @@ public:
 
 	//消除
 	void eliminate();
+	//消除空行
+	void delete_blank(std::vector<int> lines);
 };

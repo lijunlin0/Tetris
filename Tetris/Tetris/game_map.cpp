@@ -6,6 +6,7 @@
 #include<cmath>
 #include"block.h"
 #include"time.h"
+using namespace std;
 
 game_map::game_map()
 {
@@ -20,43 +21,58 @@ game_map::game_map()
 	create_block();
 }
 
+//消除空行
+void game_map::delete_blank(vector<int> lines)
+{
+	for (int index = 0; index < lines.size(); index++)
+	{
+		int y = lines[index];
+		for (int j = y; j > 0; j--)
+		{
+			for (int i = 0; i < WIDTH; i++)
+			{
+				data[i][j] = data[i][j - 1];
+			}
+		}
+		for (int a = 0; a < WIDTH; a++)
+		{
+			data[a][0] = 0;
+		}
+	}
+}
+
+
 //消除
 void game_map::eliminate()
 {
-	int y = 0;
-	if (m_block->is_move == false)
+	vector<int> lines;
+	for (int j = 0; j < HEIGHT; j++)
 	{
+		bool find = true;
 		for (int i = 0; i < WIDTH; i++)
 		{
-			int is_eli = true;
-			for (int j = 0; j < HEIGHT; j++)
+			if (data[i][j] == 0)
 			{
-				if (data[i][j] < 0)
-				{
-					is_eli = false;
-					break;
-				}
+				find = false;
+				break;
 			}
-			//如果能消除
-			if (is_eli)
+		}
+		if (find == true)
+		{
+			lines.push_back(j);
+			for (int a = 0; a < WIDTH; a++)
 			{
-				//消除
-				for (int x = 0; x < WIDTH; x++)
-				{
-					y = i - 1;
-					data[x][y] == 0;
-				}
+				data[a][j] = 0;
 			}
-
 		}
 	}
+	delete_blank(lines);
 }
 
 //生成方块
 void game_map::create_block()
 {
 	int num = rand() % COLOR_COUNT+1;
-	num = 2;
 	m_block = new block(num,this);
 }
 
@@ -72,7 +88,7 @@ void game_map::update()
 		return;
 	}
 	move_ms = time::update_ms;
-	m_block->move_down();
+	try_block_move_down();
 }
 
 //位置是否合法
@@ -124,6 +140,13 @@ void game_map::try_block_move_down()
 	if (m_block->can_move_down())
 	{
 		m_block->move_down();
+	}
+	else
+	{
+		m_block->put_to_map();
+		delete m_block;
+		eliminate();
+		create_block();
 	}
 }
 

@@ -37,4 +37,6 @@ public:
 	void draw();
 	//根据数字设置data
 	void set_data();
+	//将方块放在地图中
+	void put_to_map();
 };
