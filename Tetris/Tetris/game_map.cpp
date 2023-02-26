@@ -107,13 +107,13 @@ COLORREF game_map::value_to_color(int value)
 {
 	switch (value)
 	{
-	case 0:return BLUE;
 	case 1:return GREEN;
 	case 2:return RED;
 	case 3:return CYAN;
 	case 4:return YELLOW;
 	case 5:return BROWN;
 	case 6:return  MAGENTA;
+	case 7:return BLUE;
 	}
 }
 

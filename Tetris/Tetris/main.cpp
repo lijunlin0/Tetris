@@ -33,6 +33,7 @@ void init_ui()
 
 int main()
 {
+	srand((unsigned)time(NULL));//根据系统时间改变的随机种子
 	int size =game_map::BLOCK_SIZE;
 	int screen_width = 21 * size;
 	int screen_height = 24 * size;

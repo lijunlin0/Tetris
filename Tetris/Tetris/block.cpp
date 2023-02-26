@@ -1,6 +1,7 @@
 #include"block.h"
 #include"game_map.h"
 #include<vector>
+#include<iostream>
 using namespace std;
 
 block::block(int type,int color,game_map*map)
@@ -9,6 +10,7 @@ block::block(int type,int color,game_map*map)
 	m_color = color;
 	m=map;
 	set_data();
+	cout << m_type << endl;
 }
 
 //根据数字设置data
