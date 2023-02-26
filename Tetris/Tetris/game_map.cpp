@@ -77,8 +77,33 @@ void game_map::eliminate()
 void game_map::create_block()
 {
 	int type = rand() % COLOR_COUNT+1;
-	int color= rand() % COLOR_COUNT;
+	int color= rand() % COLOR_COUNT+1;
 	m_block = new block(type,color,this);
+	if (!m_block->can_put())
+	{
+		while (!m_block->can_put())
+		{
+			m_block->move_up();
+		}
+		draw();
+		game_end();
+	}
+}
+
+//游戏结束
+void game_map::game_end()
+{
+	int x = 13 * BLOCK_SIZE / 2;
+	int y = 23 * BLOCK_SIZE / 2;
+	//字体颜色为粉色
+	COLORREF color = RGB(255, 105, 180);
+	settextcolor(color);
+	settextstyle(64, 0, _T("Consolas"));
+	int w = textwidth(" GAME OVER !");
+	int h = textheight(" GAME OVER !");
+	//显示字体 "GAME OVER!"
+	outtextxy(x - w / 2, y - h / 2, " GAME OVER !");
+	is_over = true;
 }
 
 //更新

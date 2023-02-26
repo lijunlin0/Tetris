@@ -24,7 +24,7 @@ void block::set_data()
 	//反7
 	if (m_type == 2)
 	{
-		data[1][0] = m_color; data[1][1] = m_color; data[1][2] = m_color; data[2][2] = m_color;
+		data[1][0] = m_color; data[1][1] = m_color; data[1][2] = m_color; data[2][0] = m_color;
 	}
 	//7
 	if (m_type == 3)
@@ -239,6 +239,12 @@ bool block::can_rotate()
 	return true;
 }
 
+//上移
+void block::move_up()
+{
+
+}
+
 //左移
 void block::move_left()
 {
@@ -332,4 +338,19 @@ void block::put_to_map()
 			}
 		}
 	}
+}
+//能否放在地图上
+bool block::can_put()
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (data[i][j] == m_color&& m->data[i + block_x][j + block_y]>0)
+			{
+				return false;
+			}
+		}
+	}
+	return true;
 }

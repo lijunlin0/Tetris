@@ -29,8 +29,8 @@ public:
 	int gap;
 	int data[WIDTH][HEIGHT];
 	block* m_block;
-
 public:
+	bool is_over = false;
 	game_map();
 	//更新
 	void update();
@@ -56,4 +56,6 @@ public:
 	//消除空行
 	void delete_blank(std::vector<int> lines);
 	void play_sound();
+	//游戏结束
+	void game_end();
 };

@@ -28,6 +28,8 @@ public:
 	bool can_move_down();
 	//能否旋转
 	bool can_rotate();
+	//上移
+	void move_up();
 	//左移
 	void move_left();
 	//右移
@@ -45,4 +47,6 @@ public:
 	void set_data();
 	//将方块放在地图中
 	void put_to_map();
+	//能否放在地图上
+	bool can_put();
 };

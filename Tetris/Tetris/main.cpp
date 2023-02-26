@@ -29,7 +29,7 @@ void init_ui()
 
 	setfillcolor(BLACK);
 	solidrectangle(15 * size, 4 * size, 19 * size, 8 * size);
-}
+} 
 
 int main()
 {
@@ -44,13 +44,10 @@ int main()
 	ExMessage msg;//创建消息变量
 	while (true)
 	{
-		long long current = time::current_time();
-		if (current - time::update_ms < time::frame_ms)
+		if (m.is_over)
 		{
 			continue;
 		}
-		time::update_ms = current;
-		m.reset();
 		bool b = peekmessage(&msg, EX_KEY);
 		if (b && msg.message == WM_KEYDOWN)
 		{
@@ -71,6 +68,15 @@ int main()
 				m.try_block_move_right();
 			}
 		}
+
+		long long current = time::current_time();
+		if (current - time::update_ms < time::frame_ms)
+		{
+			continue;
+		}
+		time::update_ms = current;
+		m.reset();
 		m.update();
 	}
+	return 0;
 }
