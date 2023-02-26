@@ -1,48 +1,54 @@
 #include"block.h"
 #include"game_map.h"
+#include<vector>
+using namespace std;
 
-block::block(int value,game_map*map)
+block::block(int type,int color,game_map*map)
 {
-	m_value = value;
+	m_type = type;
+	m_color = color;
 	m=map;
 	set_data();
-	is_move = true;
 }
 
 //根据数字设置data
 void block::set_data()
 {
 	//一字形
-	if (m_value == 1)
+	if (m_type == 1)
 	{
-		data[0][1] = 1; data[1][1] = 1; data[2][1] = 1; data[3][1] = 1;
+		data[0][1] = m_color; data[1][1] = m_color; data[2][1] = m_color; data[3][1] = m_color;
 	}
 	//反7
-	if (m_value == 2)
+	if (m_type == 2)
 	{
-		data[1][0] = m_value; data[1][1] = m_value; data[1][2] = m_value; data[2][2] = m_value;
+		data[1][0] = m_color; data[1][1] = m_color; data[1][2] = m_color; data[2][2] = m_color;
 	}
 	//7
-	if (m_value == 3)
+	if (m_type == 3)
 	{
-		data[0][0] = m_value; data[1][0] = m_value; data[1][1] = m_value; data[1][2] = m_value;
+		data[0][0] = m_color; data[1][0] = m_color; data[1][1] = m_color; data[1][2] = m_color;
 	}
 	//z
-	if (m_value == 4)
+	if (m_type == 4)
 	{
-		data[0][0] = m_value; data[1][0] = m_value; data[1][1] = m_value; data[2][1] = m_value;
+		data[0][0] = m_color; data[1][0] = m_color; data[1][1] = m_color; data[2][1] = m_color;
 	}
 	//反z
-	if (m_value == 5)
+	if (m_type == 5)
 	{
-		data[1][0] = m_value; data[2][0] = m_value; data[0][1] = m_value; data[1][1] = m_value;
+		data[1][0] = m_color; data[2][0] = m_color; data[0][1] = m_color; data[1][1] = m_color;
 	}
 	//土
-	if (m_value == 6)
+	if (m_type == 6)
 	{
-		data[1][0] = m_value; data[0][1] = m_value; data[1][1] = m_value; data[2][1] = m_value;
+		data[1][0] = m_color; data[0][1] = m_color; data[1][1] = m_color; data[2][1] = m_color;
 	}
-
+	//田 
+	if (m_type == 7)
+	{
+		data[1][1] = m_color; data[2][1] = m_color; data[1][2] = m_color; data[2][2] = m_color;
+	}
 }
 
 //能否左移
@@ -52,7 +58,7 @@ bool block::can_move_left()
 	{
 		for (int j = 0; j < block::height; j++)
 		{
-			if (data[i][j] ==m_value)
+			if (data[i][j] == m_color)
 			{
 				//左边超出边界
 				if (block_x + i - 1 < 0)
@@ -76,7 +82,7 @@ bool block::can_move_right()
 	{
 		for (int j = 0; j < block::height; j++)
 		{
-			if (data[i][j] == m_value)
+			if (data[i][j] == m_color)
 			{
 				//右边超出边界
 				if ((block_x + i + 1) > (game_map::WIDTH-1))
@@ -100,7 +106,7 @@ bool block::can_move_down()
 	{
 		for (int j = 0; j < block::height; j++)
 		{
-			if (data[i][j] == m_value)
+			if (data[i][j] == m_color)
 			{
 				//下方为边界
 				if ((block_y + j + 1) > (game_map::HEIGHT-1))
@@ -146,28 +152,59 @@ std::pair<int, int> block:: get_obstacle_position(int x, int y)
 	else if (x == 2 && y == 2) { return std::pair<int, int>(1, 2); }
 }
 
+bool block::can_rotate_I()
+{
+	vector<pair<int, int>> positions;
+	positions.push_back(pair<int, int>(0,0));
+	positions.push_back(pair<int, int>(1,0));
+	positions.push_back(pair<int, int>(0,1));
+	positions.push_back(pair<int, int>(1,1));
+	positions.push_back(pair<int, int>(2,1));
+	positions.push_back(pair<int, int>(3,1));
+	positions.push_back(pair<int, int>(1,2));
+	positions.push_back(pair<int, int>(1,3));
+	positions.push_back(pair<int, int>(2,2));
+	positions.push_back(pair<int, int>(3,2));
+	positions.push_back(pair<int, int>(2,3));
+	positions.push_back(pair<int, int>(3,3));
+	for (int i = 0; i < positions.size(); i++)
+	{
+		int x = positions[i].first+block_x;
+		int y = positions[i].second+block_y;
+		if (x < 0 || x >= m->WIDTH || y < 0 || y >= m->HEIGHT)
+		{
+			return false;
+		}
+		if (m->get_value(x, y) > 0)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 //能否旋转
 bool block::can_rotate()
 {
+	//如果是田字形
+	if (m_type == 7)
+	{
+		return false;
+	}
+	//如果是一字形
+	if (m_type == 1)
+	{
+		return can_rotate_I();
+	}
+
 	int x = 0;
 	int y = 0;
-	//如果是一字形方块
-	if (m_value == 1)
-	{
-		for (int i = 0; i < width; i++)
-		{
-			for (int j = 0; j < height; j++)
-			{
-				
-			}
-		}
-	}
 	//其他方块
 	for (int i = 0; i < width-1; i++)
 	{
 		for (int j = 0; j < height-1; j++)
 		{
-			if (data[i][j] == m_value)
+			if (data[i][j] == m_color)
 			{
 				continue;
 			}
@@ -216,9 +253,37 @@ void block::move_down()
 	block_y++;
 }
 
+//一字形旋转
+void block::rotate_I()
+{
+	if (data[0][1] == m_color)
+	{
+		data[0][1] = 0;
+		data[2][1] = 0;
+		data[3][1] = 0;
+		data[1][0] = m_color;
+		data[1][2] = m_color;
+		data[1][3] = m_color;
+	}
+	else
+	{
+		data[0][1] = m_color;
+		data[2][1] = m_color;
+		data[3][1] = m_color;
+		data[1][0] = 0;
+		data[1][2] = 0;
+		data[1][3] = 0;
+	}
+}
+
 //旋转
 void block::rotate()
 {
+	if (m_type == 1)
+	{
+		rotate_I();
+		return;
+	}
 	int temp[width][height];
 	for (int i = 0; i < width; i++)
 	{
@@ -245,9 +310,9 @@ void block::draw()
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (data[i][j] == m_value)
+			if (data[i][j] == m_color)
 			{
-				m->draw_cell(i + block_x, j + block_y, m_value);
+				m->draw_cell(i + block_x, j + block_y, m_color);
 			}
 		}
 	}
@@ -259,9 +324,9 @@ void block::put_to_map()
 	{
 		for (int j = 0; j < height; j++)
 		{
-			if (data[i][j] == m_value)
+			if (data[i][j] == m_color)
 			{
-				m->data[i + block_x][j + block_y] = m_value;
+				m->data[i + block_x][j + block_y] = m_color;
 			}
 		}
 	}

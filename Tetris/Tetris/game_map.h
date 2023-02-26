@@ -5,6 +5,7 @@ class block;
 class game_map
 {
 public:
+	COLORREF color_a;
 	static const char KEY_W = 0x57;
 	static const char KEY_A = 0x41;
 	static const char KEY_S = 0x53;
@@ -19,7 +20,7 @@ public:
 	static const int BODY = 1;
 	//砖块障碍物
 	static const int BLOCK = 2;
-	static const int COLOR_COUNT=6;
+	static const int COLOR_COUNT=7;
 	const int offset_x = 2;
 	const int offset_y = 2;
 	const int BLOCK_MOVE_GAP = 500;
@@ -47,11 +48,12 @@ public:
 	int get_value(int x, int y);
 	void set_value(int x, int y,int value);
 	//画小方块
-	void draw_cell(int x,int y,int value);
+	void draw_cell(int x,int y,int color);
 	void draw();
 
 	//消除
 	void eliminate();
 	//消除空行
 	void delete_blank(std::vector<int> lines);
+	void play_sound();
 };

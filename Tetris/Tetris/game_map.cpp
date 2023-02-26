@@ -6,6 +6,9 @@
 #include<cmath>
 #include"block.h"
 #include"time.h"
+#include<windows.h>
+#include<Mmsystem.h>
+#pragma comment(lib,"winmm.lib")
 using namespace std;
 
 game_map::game_map()
@@ -59,6 +62,7 @@ void game_map::eliminate()
 		}
 		if (find == true)
 		{
+			play_sound();
 			lines.push_back(j);
 			for (int a = 0; a < WIDTH; a++)
 			{
@@ -72,8 +76,9 @@ void game_map::eliminate()
 //生成方块
 void game_map::create_block()
 {
-	int num = rand() % COLOR_COUNT+1;
-	m_block = new block(num,this);
+	int type = rand() % COLOR_COUNT+1;
+	int color= rand() % COLOR_COUNT;
+	m_block = new block(type,color,this);
 }
 
 //更新
@@ -102,13 +107,13 @@ COLORREF game_map::value_to_color(int value)
 {
 	switch (value)
 	{
-	case 1:return BLUE;
-	case 2:return GREEN;
-	case 3:return RED;
-	case 4:return CYAN;
-	case 5:return YELLOW;
-	case 6:return BROWN;
-	case 7:return  MAGENTA;
+	case 0:return BLUE;
+	case 1:return GREEN;
+	case 2:return RED;
+	case 3:return CYAN;
+	case 4:return YELLOW;
+	case 5:return BROWN;
+	case 6:return  MAGENTA;
 	}
 }
 
@@ -170,10 +175,9 @@ void game_map::reset()
 }
 
 //画小方块
-void game_map::draw_cell(int x, int y, int value)
+void game_map::draw_cell(int x, int y, int color)
 {
-	COLORREF color = value_to_color(value);
-	setfillcolor(value_to_color(color));
+    setfillcolor(value_to_color(color));
 	int left_x = (x + offset_x) * BLOCK_SIZE;
 	int up_y = (y + offset_y) * BLOCK_SIZE;
 	int right_x = (x + 1 + offset_x) * BLOCK_SIZE;
@@ -194,4 +198,13 @@ void game_map::draw()
 		}
 	}
 	m_block->draw();
+}
+void game_map::play_sound()
+{
+	int audio = rand() % 2;
+	switch (audio)
+	{
+	case 0:PlaySound(("C:/D/GitHub/Tetris/Tetris/Tetris/sound/eliminate1.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+	case 1:PlaySound(("C:/D/GitHub/Tetris/Tetris/Tetris/sound/eliminate2.wav"), NULL, SND_FILENAME | SND_ASYNC); break;
+	}
 }
