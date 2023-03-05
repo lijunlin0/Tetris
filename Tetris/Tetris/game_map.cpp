@@ -24,6 +24,7 @@ game_map::game_map()
 	 }
 	score = 0;
 	create_block();
+	draw_next();
 }
 
 //消除空行
@@ -65,6 +66,11 @@ void game_map::eliminate()
 		if (find == true)
 		{
 			score += 1;
+			gap -= BLOCK_MOVE_GAP_REDUCE;
+			if (gap < BLOCK_MOVE_GAP_MIN)
+			{
+				gap = BLOCK_MOVE_GAP_MIN;
+			}
 			play_sound();
 			lines.push_back(j);
 			for (int a = 0; a < WIDTH; a++)
@@ -79,15 +85,27 @@ void game_map::eliminate()
 //生成方块
 void game_map::create_block()
 {
-	int type = rand() % COLOR_COUNT+1;
-	int color= rand() % COLOR_COUNT+1;
-	m_block = new block(type,color,this);
+	//游戏初始化时，需要生成一个方块
+	if (m_block_next == nullptr)
+	{
+		int type = rand() % COLOR_COUNT + 1;
+		int color = rand() % COLOR_COUNT + 1;
+		m_block_next = new block(type, color, this);
+	}
+	//将下一个方块交换给当前方块
+	m_block = m_block_next;
+	//生成下一个方块
+	int type = rand() % COLOR_COUNT + 1;
+	int color = rand() % COLOR_COUNT + 1;
+	m_block_next = new block(type, color, this);
+
     if (!m_block->can_put())
 	{
 		while (!m_block->can_put())
 		{
 			m_block->move_up();
 		}
+		reset();
 		draw();
 		game_end();
 	}
@@ -121,7 +139,20 @@ void game_map::draw_score()
 	int h = textheight("SCORE:");
 	//显示字体 "GAME OVER!"
 	string str ="SCORE:" + to_string(score);
-	outtextxy(x - w / 2, y - h / 2, str.c_str());
+	outtextxy(x - w / 2-6, y - h / 2, str.c_str());
+}
+
+void game_map::draw_next()
+{
+	int x = 16 * BLOCK_SIZE;
+	int y = 2 * BLOCK_SIZE;
+	//字体颜色为粉色
+	settextcolor(WHITE);
+	settextstyle(48, 0, _T("Consolas"));
+	int w = textwidth("NEXT:");
+	int h = textheight("NEXT:");
+	//显示字体 "GAME OVER!"
+	outtextxy(x - w / 2-16, y - h / 2,"NEXT:");
 }
 
 //更新
@@ -156,7 +187,7 @@ COLORREF game_map::value_to_color(int value)
 	case 3:return CYAN;
 	case 4:return YELLOW;
 	case 5:return BROWN;
-	case 6:return  MAGENTA;
+	case 6:return MAGENTA;
 	case 7:return BLUE;
 	}
 }
@@ -216,17 +247,23 @@ void game_map::reset()
 	int right_x = (WIDTH + offset_x) * BLOCK_SIZE;
 	int down_y = (HEIGHT + offset_y) * BLOCK_SIZE;
 	solidrectangle(left_x, up_y, right_x, down_y);
+	left_x = (13 + offset_x) * BLOCK_SIZE;
+	up_y = (2 + offset_y) * BLOCK_SIZE;
+	right_x = (17 + offset_x) * BLOCK_SIZE;
+	down_y = (6 + offset_y) * BLOCK_SIZE;
+	solidrectangle(left_x, up_y, right_x, down_y);
 }
 
 //画小方块
 void game_map::draw_cell(int x, int y, int color)
 {
     setfillcolor(value_to_color(color));
+	setlinecolor(WHITE);
 	int left_x = (x + offset_x) * BLOCK_SIZE;
 	int up_y = (y + offset_y) * BLOCK_SIZE;
 	int right_x = (x + 1 + offset_x) * BLOCK_SIZE;
 	int down_y = (y + 1 + offset_y) * BLOCK_SIZE;
-	solidrectangle(left_x, up_y, right_x, down_y);
+	fillrectangle(left_x, up_y, right_x, down_y);
 }
 
 void game_map::draw()
@@ -242,6 +279,8 @@ void game_map::draw()
 		}
 	}
 	m_block->draw();
+	m_block_next->draw_next();
+
 }
 void game_map::play_sound()
 {

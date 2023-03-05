@@ -325,6 +325,20 @@ void block::rotate()
 	}
 }
 
+void block::draw_next()
+{
+	for (int i = 0; i < width; i++)
+	{
+		for (int j = 0; j < height; j++)
+		{
+			if (data[i][j] == m_color)
+			{
+				m->draw_cell(i + 13, j + 2, m_color);
+			}
+		}
+	}
+}
+
 void block::draw()
 {
 	for (int i = 0; i < width; i++)

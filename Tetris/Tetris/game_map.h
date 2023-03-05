@@ -24,11 +24,14 @@ public:
 	const int offset_x = 2;
 	const int offset_y = 2;
 	const int BLOCK_MOVE_GAP = 500;
+	const int BLOCK_MOVE_GAP_MIN = 100;
+	const int BLOCK_MOVE_GAP_REDUCE = 10;
 
 	long long move_ms;
 	int gap;
 	int data[WIDTH][HEIGHT];
 	block* m_block;
+	block* m_block_next;
 public:
 	//分数
 	int score;
@@ -62,4 +65,5 @@ public:
 	void game_end();
 	//显示分数
 	void draw_score();
+	void draw_next();
 };
