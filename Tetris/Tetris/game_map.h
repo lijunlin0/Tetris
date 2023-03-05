@@ -30,6 +30,8 @@ public:
 	int data[WIDTH][HEIGHT];
 	block* m_block;
 public:
+	//分数
+	int score;
 	bool is_over = false;
 	game_map();
 	//更新
@@ -58,4 +60,6 @@ public:
 	void play_sound();
 	//游戏结束
 	void game_end();
+	//显示分数
+	void draw_score();
 };

@@ -4,6 +4,7 @@
 #include <time.h>
 #include <conio.h>
 #include<cmath>
+#include<string>
 #include"block.h"
 #include"time.h"
 #include<windows.h>
@@ -21,6 +22,7 @@ game_map::game_map()
 			data[i][j] = 0;
 		}
 	 }
+	score = 0;
 	create_block();
 }
 
@@ -62,6 +64,7 @@ void game_map::eliminate()
 		}
 		if (find == true)
 		{
+			score += 1;
 			play_sound();
 			lines.push_back(j);
 			for (int a = 0; a < WIDTH; a++)
@@ -79,7 +82,7 @@ void game_map::create_block()
 	int type = rand() % COLOR_COUNT+1;
 	int color= rand() % COLOR_COUNT+1;
 	m_block = new block(type,color,this);
-	if (!m_block->can_put())
+    if (!m_block->can_put())
 	{
 		while (!m_block->can_put())
 		{
@@ -98,12 +101,27 @@ void game_map::game_end()
 	//字体颜色为粉色
 	COLORREF color = RGB(255, 105, 180);
 	settextcolor(color);
-	settextstyle(64, 0, _T("Consolas"));
+	settextstyle(48, 0, _T("Consolas"));
 	int w = textwidth(" GAME OVER !");
 	int h = textheight(" GAME OVER !");
 	//显示字体 "GAME OVER!"
 	outtextxy(x - w / 2, y - h / 2, " GAME OVER !");
 	is_over = true;
+}
+
+//显示分数
+void game_map::draw_score()
+{
+	int x = 16 * BLOCK_SIZE;
+	int y = 20 * BLOCK_SIZE;
+	//字体颜色为粉色
+	settextcolor(WHITE);
+	settextstyle(48, 0, _T("Consolas"));
+	int w = textwidth("SCORE:");
+	int h = textheight("SCORE:");
+	//显示字体 "GAME OVER!"
+	string str ="SCORE:" + to_string(score);
+	outtextxy(x - w / 2, y - h / 2, str.c_str());
 }
 
 //更新
@@ -119,6 +137,7 @@ void game_map::update()
 	}
 	move_ms = time::update_ms;
 	try_block_move_down();
+	draw_score();
 }
 
 //位置是否合法

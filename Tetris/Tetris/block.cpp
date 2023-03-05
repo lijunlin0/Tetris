@@ -242,7 +242,20 @@ bool block::can_rotate()
 //…œ“∆
 void block::move_up()
 {
-
+	for (int j = 0; j < height; j++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			data[i][j] = data[i][j+1];
+		}
+	}
+	for (int j = 0; j < height; j++)
+	{
+		for (int i = 0; i < width; i++)
+		{
+			data[i][3] = 0;
+		}
+	}
 }
 
 //◊Û“∆
