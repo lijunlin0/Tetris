@@ -15,6 +15,7 @@ using namespace std;
 game_map::game_map()
 {
 	gap = BLOCK_MOVE_GAP;
+	move_ms = time::update_ms;
 	for (int i = 0; i < WIDTH; i++)
 	{
 		for (int j = 0; j < HEIGHT; j++)

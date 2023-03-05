@@ -30,8 +30,8 @@ public:
 	long long move_ms;
 	int gap;
 	int data[WIDTH][HEIGHT];
-	block* m_block;
-	block* m_block_next;
+	block* m_block=nullptr;
+	block* m_block_next=nullptr;
 public:
 	//·ÖÊý
 	int score;
