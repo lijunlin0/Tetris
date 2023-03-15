@@ -75,8 +75,12 @@ int main()
 			continue;
 		}
 		time::update_ms = current;
+		BeginBatchDraw();
+
 		m.reset();
 		m.update();
+
+		EndBatchDraw();
 	}
 	return 0;
 }
