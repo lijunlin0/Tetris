@@ -7,5 +7,5 @@ https://github.com/lijunlin0/Tetris/assets/117365903/128cdada-426c-4ac9-aa82-f80
 
 示例图:
 
-![示例图](http://image.kypeople.cn/NREJmR.png) 
+<img width="562" alt="Tetris" src="https://github.com/lijunlin0/Tetris/assets/117365903/e02aac1f-1b12-4ae9-9a66-ad818e549625">
 
